@@ -26,6 +26,90 @@
         }
 
         body {
+            </style>
+</head>
+<body>
+
+<!-- TELA DE SENHA -->
+<div id="senha-overlay" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a5c1f 0%, #118c30 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+">
+    <div style="
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    ">
+        <h2 style="
+            color: #0a5c1f;
+            margin-bottom: 15px;
+            font-size: 28px;
+        ">
+            🔒 ACESSO RESTRITO
+        </h2>
+
+        <p style="
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 15px;
+        ">
+            Digite a senha para acessar o sistema.
+        </p>
+
+        <input 
+            type="password" 
+            id="senha-input"
+            placeholder="Digite a senha"
+            style="
+                width: 100%;
+                padding: 15px;
+                border-radius: 8px;
+                border: 2px solid #ccc;
+                font-size: 18px;
+                outline: none;
+                margin-bottom: 20px;
+                text-align: center;
+                letter-spacing: 2px;
+            "
+        >
+
+        <button onclick="verificarSenha()" style="
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #0a5c1f;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        ">
+            ENTRAR
+        </button>
+
+        <p id="erro-senha" style="
+            color: red;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+        ">
+            Senha incorreta!
+        </p>
+    </div>
+</div>
             background-color: var(--bg-color);
             color: var(--text-dark);
             line-height: 1.5;
@@ -779,7 +863,17 @@
         function fecharModal() {
             document.getElementById('modal').style.display = 'none';
         }
-
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        const overlay = document.getElementById('senha-overlay');
+        
+        if (overlay.style.display !== 'none') {
+            verificarSenha();
+        }
+    }
+}
+window.onload = initGrid;
+        
         window.onload = initGrid;
     </script>
 </body>
