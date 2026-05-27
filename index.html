@@ -26,90 +26,6 @@
         }
 
         body {
-            </style>
-</head>
-<body>
-
-<!-- TELA DE SENHA -->
-<div id="senha-overlay" style="
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #0a5c1f 0%, #118c30 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999;
-">
-    <div style="
-        background: white;
-        padding: 40px;
-        border-radius: 15px;
-        width: 90%;
-        max-width: 400px;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    ">
-        <h2 style="
-            color: #0a5c1f;
-            margin-bottom: 15px;
-            font-size: 28px;
-        ">
-            🔒 ACESSO RESTRITO
-        </h2>
-
-        <p style="
-            color: #555;
-            margin-bottom: 25px;
-            font-size: 15px;
-        ">
-            Digite a senha para acessar o sistema.
-        </p>
-
-        <input 
-            type="password" 
-            id="senha-input"
-            placeholder="Digite a senha"
-            style="
-                width: 100%;
-                padding: 15px;
-                border-radius: 8px;
-                border: 2px solid #ccc;
-                font-size: 18px;
-                outline: none;
-                margin-bottom: 20px;
-                text-align: center;
-                letter-spacing: 2px;
-            "
-        >
-
-        <button onclick="verificarSenha()" style="
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            background: #0a5c1f;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        ">
-            ENTRAR
-        </button>
-
-        <p id="erro-senha" style="
-            color: red;
-            margin-top: 15px;
-            display: none;
-            font-weight: bold;
-        ">
-            Senha incorreta!
-        </p>
-    </div>
-</div>
             background-color: var(--bg-color);
             color: var(--text-dark);
             line-height: 1.5;
@@ -516,6 +432,87 @@
 </head>
 <body>
 
+<!-- TELA DE SENHA -->
+<div id="senha-overlay" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a5c1f 0%, #118c30 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+">
+    <div style="
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    ">
+        <h2 style="
+            color: #0a5c1f;
+            margin-bottom: 15px;
+            font-size: 28px;
+        ">
+            🔒 ACESSO RESTRITO
+        </h2>
+
+        <p style="
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 15px;
+        ">
+            Digite a senha para acessar o sistema.
+        </p>
+
+        <input 
+            type="password" 
+            id="senha-input"
+            placeholder="Digite a senha"
+            style="
+                width: 100%;
+                padding: 15px;
+                border-radius: 8px;
+                border: 2px solid #ccc;
+                font-size: 18px;
+                outline: none;
+                margin-bottom: 20px;
+                text-align: center;
+                letter-spacing: 2px;
+            "
+        >
+
+        <button onclick="verificarSenha()" style="
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #0a5c1f;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        ">
+            ENTRAR
+        </button>
+
+        <p id="erro-senha" style="
+            color: red;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+        ">
+            Senha incorreta!
+        </p>
+    </div>
+</div>
+
     <header>
         <div class="logo-area">
             <i class="fa-solid fa-clover logo-icon"></i>
@@ -553,8 +550,7 @@
         <div class="main-column">
             <div class="card">
                 <div class="grid-header">Selecione <span id="contador" style="color: var(--danger-red);">0</span>/10 dezenas para EXCLUIR.</div>
-                <div class="grid-60" id="grid">
-                    </div>
+                <div class="grid-60" id="grid"></div>
                 <div class="action-buttons">
                     <button class="btn btn-primary" id="btn-gerar" disabled onclick="gerarFechamento()">
                         <i class="fa-solid fa-gears"></i> GERAR FECHAMENTO
@@ -660,6 +656,26 @@
     </div>
 
     <script>
+        // === CONTROLE DE ACESSO (SENHA) ===
+        function verificarSenha() {
+            const senhaInput = document.getElementById('senha-input').value;
+            const senhaCorreta = 'S3N1NHA'; // Defina sua senha aqui
+            const erroSenha = document.getElementById('erro-senha');
+            const overlay = document.getElementById('senha-overlay');
+
+            if (senhaInput === senhaCorreta) {
+                overlay.style.display = 'none';
+                initGrid();
+            } else {
+                erroSenha.style.display = 'block';
+            }
+        }
+
+        // Permitir pressionar "Enter" na tela de senha
+        document.getElementById('senha-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verificarSenha();
+        });
+
         // === PROTEÇÃO DO CÓDIGO (Nível Básico) ===
         document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -754,8 +770,6 @@
                 const div = document.createElement('div');
                 div.className = 'combo-line';
                 div.id = `combo-${index}`;
-                // Exibição na tela (mantemos a formatação amigável aqui, ou removemos também. 
-                // Decidi remover o "Jogo 01:" da tela também para refletir a nova regra.)
                 div.innerHTML = `<span>${jogoStr}</span>`;
                 container.appendChild(div);
             });
@@ -769,7 +783,6 @@
         }
 
         function copiarCombinacoes() {
-            // Nova regra de cópia: Apenas as dezenas, sem texto
             const texto = combinacoesGeradas.map(jogo => jogo.join(' ')).join('\n');
             navigator.clipboard.writeText(texto).then(() => {
                 alert("Jogos copiados para a área de transferência!");
@@ -784,7 +797,6 @@
                 return;
             }
             try {
-                // Nova regra de salvamento: Apenas as dezenas, sem texto
                 const texto = combinacoesGeradas.map(jogo => jogo.join(' ')).join('\n');
                 const uriContent = "data:text/plain;charset=utf-8," + encodeURIComponent(texto);
                 
@@ -806,6 +818,11 @@
             combinacoesGeradas = [];
             document.getElementById('combinations-list').innerHTML = '';
             document.getElementById('dezenas-sorteadas').value = '';
+            // Remove destaque das premiações
+            for (let i = 0; i < matriz_bruta.length; i++) {
+                const div = document.getElementById(`combo-${i}`);
+                if(div) div.classList.remove('premio');
+            }
             alert("Resultados limpos. Você pode gerar o fechamento novamente com as mesmas exclusões ou alterá-las.");
         }
 
@@ -852,29 +869,16 @@
             const modalText = document.getElementById('modal-text');
             
             if (totalSenas > 0) {
-                modalText.innerHTML = `Parabéns!<br><br>Você obteve <strong>${totalSenas}</strong> Sena(s)!<br>Os jogos premiados estão em destaque.`;
+                modalText.innerHTML = `Parabéns!<br><br>Você obteve <strong>${totalSenas}</strong> jogo(s) premiado(s) com 6 acertos! Verifique as linhas piscando em amarelo.`;
             } else {
-                modalText.innerHTML = `Poxa, não foi dessa vez.<br>Nenhum jogo atingiu 6 acertos.`;
+                modalText.innerHTML = `Não foi dessa vez!<br><br>Nenhum dos jogos gerados completou as 6 dezenas sorteadas.`;
             }
-            
             modal.style.display = 'flex';
         }
 
         function fecharModal() {
             document.getElementById('modal').style.display = 'none';
         }
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        const overlay = document.getElementById('senha-overlay');
-        
-        if (overlay.style.display !== 'none') {
-            verificarSenha();
-        }
-    }
-}
-window.onload = initGrid;
-        
-        window.onload = initGrid;
     </script>
 </body>
 </html>
