@@ -84,6 +84,7 @@
             font-weight: bold;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             text-decoration: none;
             font-size: 14px;
@@ -94,6 +95,7 @@
             background: transparent;
             border: 2px solid white;
             color: white;
+            width: 100%;
         }
         .btn-login:hover { background: rgba(255,255,255,0.1); }
 
@@ -103,6 +105,27 @@
             color: #000;
         }
         .btn-cadastro:hover { background: #e6b800; border-color: #e6b800; }
+
+        /* Estilo do Grupo Login + Botão Teste (Indicador) */
+        .login-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .btn-toggle-mini {
+            background: var(--danger-red);
+            color: white;
+            border: 1px solid white;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            white-space: nowrap;
+        }
 
         /* Hero Section */
         .hero {
@@ -138,6 +161,7 @@
         .badges {
             display: flex;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
         .badge {
@@ -149,6 +173,7 @@
             align-items: center;
             gap: 10px;
             font-weight: 600;
+            transition: transform 0.2s;
         }
         .badge i {
             color: var(--secondary-green);
@@ -428,11 +453,42 @@
             .user-actions { flex-direction: column; gap: 10px; }
             header { flex-direction: column; gap: 15px; padding: 15px; }
         }
+
+        /* Estilos do Botão Flutuante (Mercado Pago) */
+        .btn-comprar-flutuante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #009ee3;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            display: none;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .btn-comprar-flutuante:hover {
+            background-color: #007bb5;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Hover no botão de teste da tela de senha */
+        .btn-acesso-teste:hover {
+            background-color: rgba(10, 92, 31, 0.1) !important;
+        }
     </style>
 </head>
 <body>
 
-<!-- TELA DE SENHA -->
+<a href="https://mpago.la/2v5syPv" target="_blank" id="btnComprarFlutuante" class="btn-comprar-flutuante">
+    <i class="fa-solid fa-cart-shopping"></i> COMPRAR VERSÃO COMPLETA
+</a>
+
 <div id="senha-overlay" style="
     position: fixed;
     top: 0;
@@ -510,6 +566,24 @@
         ">
             Senha incorreta!
         </p>
+
+        <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px;">
+            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Ainda não tem acesso?</p>
+            <button onclick="entrarModoTeste()" class="btn-acesso-teste" style="
+                width: 100%;
+                padding: 12px;
+                border: 2px solid #0a5c1f;
+                border-radius: 8px;
+                background: transparent;
+                color: #0a5c1f;
+                font-size: 14px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.3s;
+            ">
+                <i class="fa-solid fa-flask"></i> ACESSAR MODO TESTE
+            </button>
+        </div>
     </div>
 </div>
 
@@ -525,10 +599,18 @@
             <a href="#">Resultados</a>
             <a href="#">Contato</a>
         </nav>
+        
         <div class="user-actions">
-            <a href="https://lotoimperial.com" target="_blank" class="btn-header btn-login">
-                <i class="fa-solid fa-right-to-bracket"></i> LOGIN
-            </a>
+            <div class="login-group">
+                <a href="https://lotoimperial.com" target="_blank" class="btn-header btn-login">
+                    <i class="fa-solid fa-right-to-bracket"></i> LOGIN
+                </a>
+                
+                <div id="btn-toggle-teste" class="btn-toggle-mini">
+                    <i class="fa-solid fa-shield-halved"></i> <span id="txt-modo-teste">AGUARDANDO ACESSO...</span>
+                </div>
+            </div>
+
             <a href="https://web.lotoimperial.com/admin/indicate/328" target="_blank" class="btn-header btn-cadastro">
                 <i class="fa-solid fa-user-plus"></i> CADASTRO
             </a>
@@ -562,14 +644,14 @@
             </div>
 
             <div class="card results-container" id="results-area">
-                <div class="card-title">Suas 23 Combinações Geradas:</div>
+                <div class="card-title">Suas Combinações Geradas:</div>
                 <div class="combinations-box" id="combinations-list"></div>
                  
                 <div class="bottom-actions">
-                    <button class="btn btn-outline" style="font-size: 12px; padding: 10px 15px;" onclick="salvarJogos()">
+                    <button class="btn btn-outline" id="btn-salvar" style="font-size: 12px; padding: 10px 15px;" onclick="salvarJogos()">
                         <i class="fa-solid fa-download"></i> SALVAR JOGOS
                     </button>
-                    <button class="btn btn-outline" style="font-size: 12px; padding: 10px 15px; color: #4b5563; border-color: #d1d5db;" onclick="window.print()">
+                    <button class="btn btn-outline" id="btn-imprimir" style="font-size: 12px; padding: 10px 15px; color: #4b5563; border-color: #d1d5db;" onclick="window.print()">
                         <i class="fa-solid fa-print"></i> IMPRIMIR
                     </button>
                     <button class="btn btn-danger-outline" style="font-size: 12px; padding: 10px 15px;" onclick="limparTudo()">
@@ -656,7 +738,12 @@
     </div>
 
     <script>
-        // === CONTROLE DE ACESSO (SENHA) ===
+        // === VARIÁVEIS DE ESTADO ===
+        let modoTesteAtivo = false; // Começa como falso, e é definido pelas ações da tela de bloqueio
+
+        // === CONTROLE DE ACESSO ===
+
+        // Função para Entrar com a Senha Correta (Versão Completa)
         function verificarSenha() {
             const senhaInput = document.getElementById('senha-input').value;
             const senhaCorreta = 'S3N1NHA'; // Defina sua senha aqui
@@ -664,11 +751,33 @@
             const overlay = document.getElementById('senha-overlay');
 
             if (senhaInput === senhaCorreta) {
+                modoTesteAtivo = false;
                 overlay.style.display = 'none';
                 initGrid();
+                
+                // Atualiza o indicador visual do Header
+                const badge = document.getElementById('btn-toggle-teste');
+                const txt = document.getElementById('txt-modo-teste');
+                badge.style.backgroundColor = 'var(--secondary-green)';
+                badge.style.border = 'none';
+                txt.textContent = 'VERSÃO COMPLETA ATIVA';
             } else {
                 erroSenha.style.display = 'block';
             }
+        }
+
+        // Função para Acessar o Modo Teste direto da tela de bloqueio
+        function entrarModoTeste() {
+            modoTesteAtivo = true;
+            document.getElementById('senha-overlay').style.display = 'none';
+            initGrid();
+
+            // Atualiza o indicador visual do Header
+            const badge = document.getElementById('btn-toggle-teste');
+            const txt = document.getElementById('txt-modo-teste');
+            badge.style.backgroundColor = 'var(--danger-red)';
+            badge.style.border = '1px solid white';
+            txt.textContent = 'MODO TESTE: LIMITADO';
         }
 
         // Permitir pressionar "Enter" na tela de senha
@@ -760,7 +869,7 @@
             container.innerHTML = '';
 
             matriz_bruta.forEach((linha_str, index) => {
-                const indices = Secret = linha_str.split(' ').map(num => parseInt(num, 10));
+                const indices = linha_str.split(' ').map(num => parseInt(num, 10));
                 const jogoReal = indices.map(idx => pad(dezenasValidas[idx - 1]));
                 jogoReal.sort((a, b) => parseInt(a) - parseInt(b));
                 
@@ -770,12 +879,32 @@
                 const div = document.createElement('div');
                 div.className = 'combo-line';
                 div.id = `combo-${index}`;
-                div.innerHTML = `<span>${jogoStr}</span>`;
+                div.innerHTML = `<span><b>Jogo ${pad(index + 1)}:</b> ${jogoStr}</span>`;
+                
+                // MODO TESTE ATIVO: Esconde da 11ª combinação em diante (index >= 10)
+                if (modoTesteAtivo && index >= 10) {
+                    div.style.display = 'none';
+                } else {
+                    div.style.display = 'flex';
+                }
+
                 container.appendChild(div);
             });
 
             document.getElementById('results-area').style.display = 'block';
-            document.getElementById('btn-copiar').style.display = 'flex';
+            
+            // TRATAMENTO DOS BOTÕES SEGUNDO O MODO TESTE
+            if (modoTesteAtivo) {
+                document.getElementById('btn-copiar').style.display = 'none';
+                document.getElementById('btn-salvar').style.display = 'none';
+                document.getElementById('btn-imprimir').style.display = 'none';
+                document.getElementById('btnComprarFlutuante').style.display = 'block';
+            } else {
+                document.getElementById('btn-copiar').style.display = 'flex';
+                document.getElementById('btn-salvar').style.display = 'flex';
+                document.getElementById('btn-imprimir').style.display = 'flex';
+                document.getElementById('btnComprarFlutuante').style.display = 'none';
+            }
             
             if(window.innerWidth <= 900) {
                 document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
@@ -783,6 +912,7 @@
         }
 
         function copiarCombinacoes() {
+            if(modoTesteAtivo) return;
             const texto = combinacoesGeradas.map(jogo => jogo.join(' ')).join('\n');
             navigator.clipboard.writeText(texto).then(() => {
                 alert("Jogos copiados para a área de transferência!");
@@ -792,6 +922,7 @@
         }
 
         function salvarJogos() {
+            if(modoTesteAtivo) return;
             if(combinacoesGeradas.length === 0) {
                 alert("Nenhum jogo para salvar. Gere o fechamento primeiro.");
                 return;
@@ -818,7 +949,6 @@
             combinacoesGeradas = [];
             document.getElementById('combinations-list').innerHTML = '';
             document.getElementById('dezenas-sorteadas').value = '';
-            // Remove destaque das premiações
             for (let i = 0; i < matriz_bruta.length; i++) {
                 const div = document.getElementById(`combo-${i}`);
                 if(div) div.classList.remove('premio');
@@ -832,50 +962,53 @@
             document.getElementById('btn-gerar').disabled = true;
             document.getElementById('btn-copiar').style.display = 'none';
             document.getElementById('results-area').style.display = 'none';
-            document.getElementById('dezenas-sorteadas').value = '';
-            initGrid(); 
+            initGrid();
         }
 
+        // === SISTEMA DO CONFERIDOR E MODAL ===
         function conferirJogos() {
-            if(combinacoesGeradas.length === 0) {
-                alert("Gere o fechamento primeiro!");
+            const dezenasSorteadasInput = document.getElementById('dezenas-sorteadas').value.trim();
+            if (!dezenasSorteadasInput) {
+                alert("Por favor, digite as dezenas sorteadas.");
                 return;
             }
 
-            const input = document.getElementById('dezenas-sorteadas').value;
-            const sorteadas = input.match(/\d+/g);
-            
-            if (!sorteadas || sorteadas.length < 6) {
-                alert("Digite as 6 dezenas sorteadas válidas.");
+            const sorteadas = dezenasSorteadasInput.split(/\s+/).map(num => pad(parseInt(num, 10))).filter(num => num !== "NaN");
+
+            if (sorteadas.length !== 6) {
+                alert("Por favor, insira exatamente 6 dezenas para conferência.");
                 return;
             }
 
-            const sorteadasFormatadas = sorteadas.map(pad);
-            let totalSenas = 0;
+            if (combinacoesGeradas.length === 0) {
+                alert("Gere o fechamento antes de fazer a conferência.");
+                return;
+            }
 
-            combinacoesGeradas.forEach((jogo, index) => {
-                const acertos = sorteadasFormatadas.filter(num => jogo.includes(num)).length;
-                const div = document.getElementById(`combo-${index}`);
-                
+            let totalPremiados = 0;
+            let limiteMaximo = modoTesteAtivo ? 10 : combinacoesGeradas.length;
+
+            for (let i = 0; i < combinacoesGeradas.length; i++) {
+                const div = document.getElementById(`combo-${i}`);
+                if (div) div.classList.remove('premio');
+            }
+
+            for (let i = 0; i < limiteMaximo; i++) {
+                const jogo = combinacoesGeradas[i];
+                const acertos = jogo.filter(dezena => sorteadas.includes(dezena)).length;
+
                 if (acertos === 6) {
-                    totalSenas++;
-                    if (div) {
-                        div.classList.add('premio');
-                        div.innerHTML = `<span class="label">PREMIADO</span> <span>${jogo.join(' ')}</span>`;
-                    }
-                } else {
-                    if (div) {
-                        div.classList.remove('premio');
-                        div.innerHTML = `<span>${jogo.join(' ')}</span>`;
-                    }
+                    const div = document.getElementById(`combo-${i}`);
+                    if (div) div.classList.add('premio');
+                    totalPremiados++;
                 }
-            });
+            }
 
-            const modalText = totalSenas > 0 
-                ? `Parabéns! O fechamento gerou ${totalSenas} jogo(s) com 6 acertos!` 
-                : "Nenhum jogo acertou as 6 dezenas sorteadas.";
-            
-            document.getElementById('modal-text').textContent = modalText;
+            const textoResultado = totalPremiados > 0 
+                ? `Conferência Finalizada! Foram encontrados ${totalPremiados} jogo(s) com 6 ACERTOS entre os listados.`
+                : "Conferência Finalizada. Nenhum dos jogos listados atingiu os 6 acertos.";
+
+            document.getElementById('modal-text').innerText = textoResultado;
             document.getElementById('modal').style.display = 'flex';
         }
 
