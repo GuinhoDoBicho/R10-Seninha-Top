@@ -112,7 +112,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+         
         .hero::after {
             content: '';
             position: absolute;
@@ -248,7 +248,7 @@
             color: white;
         }
         .btn-primary:hover { background-color: #064014; }
-        
+         
         .btn-outline {
             background-color: transparent;
             border: 2px solid var(--primary-green);
@@ -291,7 +291,7 @@
             display: flex;
             gap: 10px;
         }
-        
+         
         .combo-line span.label {
             font-weight: bold;
             color: var(--text-dark);
@@ -303,7 +303,7 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-        
+         
         .btn-danger-outline {
             border: 1px solid var(--danger-red);
             color: var(--danger-red);
@@ -315,7 +315,7 @@
             background-color: var(--highlight-yellow);
             border: none;
         }
-        
+         
         .conferidor-card .card-title {
             border-bottom: none;
             margin-bottom: 10px;
@@ -389,7 +389,7 @@
         .footer-col a { color: #d1d5db; text-decoration: none; }
         .footer-col a:hover { color: white; }
         .responsible-gaming { border: 1px solid #374151; padding: 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 10px; font-size: 12px;}
-        
+         
         .footer-bottom {
             text-align: center;
             border-top: 1px solid #374151;
@@ -546,7 +546,7 @@
     </div>
 
     <div class="main-container">
-        
+         
         <div class="main-column">
             <div class="card">
                 <div class="grid-header">Selecione <span id="contador" style="color: var(--danger-red);">0</span>/10 dezenas para EXCLUIR.</div>
@@ -564,7 +564,7 @@
             <div class="card results-container" id="results-area">
                 <div class="card-title">Suas 23 Combinações Geradas:</div>
                 <div class="combinations-box" id="combinations-list"></div>
-                
+                 
                 <div class="bottom-actions">
                     <button class="btn btn-outline" style="font-size: 12px; padding: 10px 15px;" onclick="salvarJogos()">
                         <i class="fa-solid fa-download"></i> SALVAR JOGOS
@@ -760,7 +760,7 @@
             container.innerHTML = '';
 
             matriz_bruta.forEach((linha_str, index) => {
-                const indices = linha_str.split(' ').map(num => parseInt(num, 10));
+                const indices = Secret = linha_str.split(' ').map(num => parseInt(num, 10));
                 const jogoReal = indices.map(idx => pad(dezenasValidas[idx - 1]));
                 jogoReal.sort((a, b) => parseInt(a) - parseInt(b));
                 
@@ -854,26 +854,29 @@
             let totalSenas = 0;
 
             combinacoesGeradas.forEach((jogo, index) => {
+                const acertos = sorteadasFormatadas.filter(num => jogo.includes(num)).length;
                 const div = document.getElementById(`combo-${index}`);
-                div.classList.remove('premio'); 
-
-                const acertos = jogo.filter(dezena => sorteadasFormatadas.includes(dezena)).length;
-
-                if (acertos >= 6) {
+                
+                if (acertos === 6) {
                     totalSenas++;
-                    div.classList.add('premio');
+                    if (div) {
+                        div.classList.add('premio');
+                        div.innerHTML = `<span class="label">PREMIADO</span> <span>${jogo.join(' ')}</span>`;
+                    }
+                } else {
+                    if (div) {
+                        div.classList.remove('premio');
+                        div.innerHTML = `<span>${jogo.join(' ')}</span>`;
+                    }
                 }
             });
 
-            const modal = document.getElementById('modal');
-            const modalText = document.getElementById('modal-text');
+            const modalText = totalSenas > 0 
+                ? `Parabéns! O fechamento gerou ${totalSenas} jogo(s) com 6 acertos!` 
+                : "Nenhum jogo acertou as 6 dezenas sorteadas.";
             
-            if (totalSenas > 0) {
-                modalText.innerHTML = `Parabéns!<br><br>Você obteve <strong>${totalSenas}</strong> jogo(s) premiado(s) com 6 acertos! Verifique as linhas piscando em amarelo.`;
-            } else {
-                modalText.innerHTML = `Não foi dessa vez!<br><br>Nenhum dos jogos gerados completou as 6 dezenas sorteadas.`;
-            }
-            modal.style.display = 'flex';
+            document.getElementById('modal-text').textContent = modalText;
+            document.getElementById('modal').style.display = 'flex';
         }
 
         function fecharModal() {
