@@ -741,6 +741,25 @@
         // === VARIÁVEIS DE ESTADO ===
         let modoTesteAtivo = false; // Começa como falso, e é definido pelas ações da tela de bloqueio
 
+        // === MEMORIZAÇÃO DE DISPOSITIVO (NOVO) ===
+        document.addEventListener("DOMContentLoaded", () => {
+            // Verifica se existe a chave salva indicando que a senha já foi digitada
+            if (localStorage.getItem('seninha_r10_acesso') === 'liberado') {
+                modoTesteAtivo = false;
+                document.getElementById('senha-overlay').style.display = 'none';
+                initGrid();
+                
+                // Atualiza o indicador visual do Header
+                const badge = document.getElementById('btn-toggle-teste');
+                const txt = document.getElementById('txt-modo-teste');
+                if (badge && txt) {
+                    badge.style.backgroundColor = 'var(--secondary-green)';
+                    badge.style.border = 'none';
+                    txt.textContent = 'VERSÃO COMPLETA ATIVA';
+                }
+            }
+        });
+
         // === CONTROLE DE ACESSO ===
 
         // Função para Entrar com a Senha Correta (Versão Completa)
@@ -751,6 +770,9 @@
             const overlay = document.getElementById('senha-overlay');
 
             if (senhaInput === senhaCorreta) {
+                // NOVO: Salva a liberação no navegador do cliente
+                localStorage.setItem('seninha_r10_acesso', 'liberado');
+                
                 modoTesteAtivo = false;
                 overlay.style.display = 'none';
                 initGrid();
